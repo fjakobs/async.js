@@ -3,6 +3,11 @@ var assert = require("assert")
 
 var Test = {
     
+    setUpSuite: function(next) {
+        console.log("set up suite")
+        next();
+    },
+    
     "test toArray": function(next) {
         async.range(0, 3)
             .toArray(function(err, values) {

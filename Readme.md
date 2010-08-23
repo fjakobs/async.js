@@ -64,17 +64,17 @@ It gets even worse if an asynchronous function has to be applied to a sequence o
     
 This code reads the contents of a directory, filters out all directory and returns the contens of all files as an array. Without any helpers the whole control flow management totally obscures the intent of the code. With async.js it is possible to move the control flow aspects of the code out of the function and rewrite it like this:
 
-    function loaddir(path, callback)
-    async.readdir(".")
-        .stat()
-        .filter(function(file) {
-            return file.stat.isFile()
-        })
-        .readFile()
-        .filter(function(file) {
-            return file.data
-        })
-        .toString(callback)
+    function loaddir(path, callback) {
+        async.readdir(".")
+            .stat()
+            .filter(function(file) {
+                return file.stat.isFile()
+            })
+            .readFile("utf8")
+            .filter(function(file) {
+                return file.data
+            })
+            .toString(callback)
     }
     
 
