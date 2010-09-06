@@ -316,7 +316,7 @@ var Test = {
     },    
 }
 
-module.exports = require("../lib/async/test").testcase(Test)
+module.exports = require("../lib/async/test").testcase(Test, "fs")
 
 if (module === require.main)
-    module.exports.run().report().end()
+    module.exports.exec()

@@ -3,6 +3,8 @@ var assert = require("assert")
 
 var Test = {
     
+    name: "async",
+    
     setUpSuite: function(next) {
         console.log("set up suite")
         next();
@@ -91,4 +93,4 @@ var Test = {
 module.exports = require("../lib/async/test").testcase(Test)
 
 if (module === require.main)
-    module.exports.run().report().end()
+    module.exports.exec()
