@@ -183,6 +183,7 @@ var Test = {
                     "/dir1/1.txt",
                     "/dir2",
                     "/dir2/dir22",
+                    "/dir2/dir22/22.txt",
                     "/dir2/2.txt",
                     "/1.txt"
                 ].map(function(dir) {
@@ -200,6 +201,7 @@ var Test = {
                 var expected = [
                     "/dir1/1.txt",
                     "/dir1",
+                    "/dir2/dir22/22.txt",
                     "/dir2/dir22",
                     "/dir2/2.txt",
                     "/dir2",
