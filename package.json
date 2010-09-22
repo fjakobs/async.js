@@ -2,7 +2,7 @@
     "name": "asyncjs",
     "description": "async.js it for the node fs module, what jQuery is for the DOM",
     "version": "0.0.2",
-    "homepage" : "http://github.com/fjakobs/async.js.git",
+    "homepage" : "http://github.com/fjakobs/async.js",
     "engines": {"node": ">= 0.1.102"},
     "author": "Fabian Jakobs <fabian.jakobs@web.de>",
     "scripts": { "test": "node test/all.js" },
