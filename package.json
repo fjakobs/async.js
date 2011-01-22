@@ -6,7 +6,9 @@
     "engines": {"node": ">= 0.2.0"},
     "author": "Fabian Jakobs <fabian.jakobs@web.de>",
     "scripts": { "test": "node test/all.js" },
-    "main": "lib/async",
+    "directories": {
+        "lib": "lib/async"
+    },
     "repository" : {
         "type" : "git",
          "url" : "http://github.com/fjakobs/async.js.git"
