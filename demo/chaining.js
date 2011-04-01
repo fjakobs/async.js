@@ -9,10 +9,18 @@ var async = require("../lib/async")
 var even = async.range(0, null, 2)
 var odd = async.range(1, null, 2)
 
+async.list([1,2,3,4])
+    .expand(function(val, next) {        
+        next(null, async.list([val, val, val]))
+    })
+    .toArray(function(err, result) {
+        console.log("expanded " + result)
+    })
+
 even.slice(0, 4)
     .reverse()
     .toArray(function(err, result) {
-        console.log("revers " + result)
+        console.log("reverse " + result)
     })
 
 odd.slice(2, 6)
