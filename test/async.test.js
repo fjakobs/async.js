@@ -50,6 +50,44 @@ var Test = {
                 next()
             })
     },
+
+    "test end": function(next) {
+        async.range(0, 3)
+            .end(function(err, last) {
+                assert.equal(err, undefined)
+                assert.equal(last, 2)
+                next()
+            })
+    },
+    
+    "test end with break on error": function(next) {
+        async.range(0, 3)
+            .each(function(value, next) {
+                if (value == 1)
+                    next("ERROR")
+                else
+                    next()
+            })
+            .end(function(err, last) {
+                //assert.ok(err)
+                next()
+            })
+    },
+    
+    "test end with continue on error": function(next) {
+        async.range(0, 3)
+            .each(function(value, next) {
+                if (value == 1)
+                    next("ERROR")
+                else
+                    next()
+            })
+            .end(false, function(err, last) {
+                assert.strictEqual(err, "ERROR")
+                assert.equal(last, 2)
+                next()
+            })
+    },
     
     "test call": function(next) {
         var context = {}
