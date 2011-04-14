@@ -1,14 +1,12 @@
 {
     "name": "asyncjs",
     "description": "async.js it for the node fs module, what jQuery is for the DOM",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "homepage" : "http://github.com/fjakobs/async.js",
-    "engines": {"node": ">= 0.2.0"},
+    "engines": {"node": ">= 0.4.0"},
     "author": "Fabian Jakobs <fabian.jakobs@web.de>",
     "scripts": { "test": "node test/all.js" },
-    "directories": {
-        "lib": "lib/async"
-    },
+    "main": "index",
     "repository" : {
         "type" : "git",
          "url" : "http://github.com/fjakobs/async.js.git"
