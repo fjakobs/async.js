@@ -1,4 +1,4 @@
-var async = require("../lib/async")
+var async = require("../index")
 var assert = require("assert")
 var Path = require("path")
 var fs = require("fs")
@@ -318,7 +318,7 @@ var Test = {
     },    
 }
 
-module.exports = require("../lib/async/test").testcase(Test, "fs")
+module.exports = require("../lib/test").testcase(Test, "fs")
 
 if (module === require.main)
     module.exports.exec()
