@@ -136,7 +136,7 @@ Generic filters:
 How does it work?
 =================
 
-## Construcotrs
+## Constructors
 
 Constructors are the sources of async streams. They return an `async.Generator` instance which generates a sequence of values.
 
