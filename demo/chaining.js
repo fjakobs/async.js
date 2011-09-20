@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-var async = require("../lib/async")
+var async = require("../index")
 
 var even = async.range(0, null, 2)
 var odd = async.range(1, null, 2)

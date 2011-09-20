@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-var async = require("../lib/async")
+var async = require("../index")
 
 async.readdir(__dirname)
     .stat()
