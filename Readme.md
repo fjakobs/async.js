@@ -155,8 +155,13 @@ TODO
 - Add documentation about the fs plugin
 - Add documentation about the unit testing framework
 - improve test coverage of the core functionality
-- add node package manager support (npm, kiwi)
 - create browser version
+
+Continuous Integration status
+-----------------------------
+
+This project is tested with [Travis CI](http://travis-ci.org)
+[![Build Status](https://secure.travis-ci.org/fjakobs/async.js.png)](http://travis-ci.org/fjakobs/async.js)
 
 Core API
 ========
