@@ -1,5 +1,5 @@
 
-var async = require("../lib/async")
+var async = require("../index")
 
 function postOrder(next) {
     console.log("")

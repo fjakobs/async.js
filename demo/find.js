@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var async = require("../lib/async")
+var async = require("../index")
 
 function find(path, callback) {    
     async.walkfiles(path, null, async.PREORDER)

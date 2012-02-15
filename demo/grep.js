@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var async = require("../lib/async")
+var async = require("../index")
 
 function grep(pattern, file, callback) {
     async.glob(file)
