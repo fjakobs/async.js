@@ -107,7 +107,7 @@ Most of the functions from the `fs` module in node.js are exposed as chainable f
 - `mkdir`/`rmdir`
 - `realpath`
 - `open`/`close`
-- `exists` (from `path.exists`)
+- `exists` (from `fs.exists`)
 - `chmod`
 - `readFile`/`writeFile`
 
