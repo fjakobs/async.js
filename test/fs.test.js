@@ -315,7 +315,19 @@ var Test = {
                 assert.equal(JSON.stringify(values.sort()), JSON.stringify(expected.sort()))
                 next()
             })        
-    },    
+    },  
+    
+    "test copytree should deal with recursive symlinks": function(next) {
+        async.copytree(testDir + "/symlink-dir", testDir + "/symlink-dir-copy", function (err) {
+            assert.equal(err, null);
+            
+            fs.lstat(testDir + "/symlink-dir-copy/dir/symlink-dir", function (err, stat) {
+                assert.equal(err, null);
+                assert.equal(stat.isSymbolicLink(), true);
+                next();
+            });
+        });       
+    },  
 }
 
 module.exports = require("../lib/test").testcase(Test, "fs")
