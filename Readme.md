@@ -22,15 +22,15 @@ asncFunction1(function(err, result) {
 
 With async.js this can be written as
 ```javascript
-  async.list([
-    asncFunction1,
-    asncFunction2,
-    asncFunction3,
-    asncFunction4,
-    asncFunction5,
-  ]).call().end(function(err, result) {
-    // do something useful
-  });
+async.list([
+  asncFunction1,
+  asncFunction2,
+  asncFunction3,
+  asncFunction4,
+  asncFunction5,
+]).call().end(function(err, result) {
+  // do something useful
+});
 ```
 It gets even worse if an asynchronous function has to be applied to a sequence of values. There is a nice example of this in the  howtonode.org article [Control Flow in Node Part III](http://howtonode.org/control-flow-part-iii):
 ```javascript
