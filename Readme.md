@@ -4,7 +4,7 @@ async.js
 **A clean, composable way to manipulate sequences of values with asynchronous functions
 **
 
-Dealing with control flow in heavily asynchronous code can be a big challange. Without any helper functions the code can easily degenerate into a christmas tree shape because of the callback of a callback of a callback syndrome.
+Dealing with control flow in heavily asynchronous code can be a big challenge. Without any helper functions the code can easily degenerate into a christmas tree shape because of the callback of a callback of a callback syndrome.
 
 ```js
     asncFunction1(function(err, result) {
