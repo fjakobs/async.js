@@ -34,7 +34,9 @@ var Test = {
         async.files([testDir + "/3.txt"])
             .unlink()
             .end(function(err, file) {
+                /* jshint ignore:start */
                 Path.exists(file.path, function(exists) {
+                /* jshint ignore:end */
                     assert.ok(!exists)
                     next()
                 })
@@ -45,7 +47,9 @@ var Test = {
         async.files([testDir + "/emptydir"])
             .rmdir()
             .end(function(err, file) {
+                /* jshint ignore:start */
                 Path.exists(file.path, function(exists) {
+                /* jshint ignore:end */
                     assert.ok(!exists)
                     next()
                 })
@@ -57,7 +61,9 @@ var Test = {
             .rmdir()
             .end(function(err, file) {
                 assert.ok(err)
+                /* jshint ignore:start */
                 Path.exists(file.path, function(exists) {
+                /* jshint ignore:end */
                     assert.ok(exists)
                     next()
                 })
@@ -130,14 +136,18 @@ var Test = {
         async.files([testDir + "/newdir"])
             .mkdir(0755)
             .each(function(file, next) {
+                /* jshint ignore:start */
                 Path.exists(file.path, function(exists) {
+                /* jshint ignore:end */
                     assert.ok(exists)
                     next()
                 })
             })
             .rmdir()
             .each(function(file, next) {
+            	/* jshint ignore:start */
                 Path.exists(file.path, function(exists) {
+                /* jshint ignore:end */
                     assert.ok(!exists)
                     next()
                 })
