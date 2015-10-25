@@ -1,5 +1,5 @@
 {
 	"globals": {
-		"Path": false
+		"Path": true
 	}
 }
