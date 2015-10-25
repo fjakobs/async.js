@@ -34,7 +34,7 @@ var Test = {
         async.files([testDir + "/3.txt"])
             .unlink()
             .end(function(err, file) {
-                Path.exists(file.Path, function(exists) {
+                Path.exists(file.path, function(exists) {
                     assert.ok(!exists)
                     next()
                 })
