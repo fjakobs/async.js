@@ -1,3 +1,5 @@
-"globals": {
-	"Path"
+{
+	"globals": {
+		"Path": false
+	}
 }
