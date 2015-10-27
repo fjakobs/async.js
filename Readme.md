@@ -6,78 +6,78 @@ async.js
 
 Dealing with control flow in heavily asynchronous code can be a big challenge. Without any helper functions the code can easily degenerate into a christmas tree shape because of the callback of a callback of a callback syndrome.
 
-```js
-    asncFunction1(function(err, result) {
-        asncFunction2(function(err, result) {
-            asncFunction3(function(err, result) {
-                asncFunction4(function(err, result) {
-                    asncFunction5(function(err, result) {
-                        // do something useful
-                    })
-                })
-            })
+```javascript
+asncFunction1(function(err, result) {
+  asncFunction2(function(err, result) {
+    asncFunction3(function(err, result) {
+      asncFunction4(function(err, result) {
+        asncFunction5(function(err, result) {
+          // do something useful
         })
+      })
     })
+  })
+})
 ```    
 
 With async.js this can be written as
-```js
-    async.list([
-        asncFunction1,
-        asncFunction2,
-        asncFunction3,
-        asncFunction4,
-        asncFunction5,
-    ]).call().end(function(err, result) {
-        // do something useful
-    });
+```javascript
+async.list([
+  asncFunction1,
+  asncFunction2,
+  asncFunction3,
+  asncFunction4,
+  asncFunction5,
+]).call().end(function(err, result) {
+  // do something useful
+});
 ```
 It gets even worse if an asynchronous function has to be applied to a sequence of values. There is a nice example of this in the  howtonode.org article [Control Flow in Node Part III](http://howtonode.org/control-flow-part-iii):
-```js
-    // Here is the async version without helpers
-    function loaddir(path, callback) {
-      fs.readdir(path, function (err, filenames) {
+```javascript
+// Here is the async version without helpers
+function loaddir(path, callback) {
+  fs.readdir(path, function (err, filenames) {
+    if (err) { callback(err); return; }
+    var realfiles = [];
+    var count = filenames.length;
+    filenames.forEach(function (filename) {
+      fs.stat(filename, function (err, stat) {
         if (err) { callback(err); return; }
-        var realfiles = [];
-        var count = filenames.length;
-        filenames.forEach(function (filename) {
-          fs.stat(filename, function (err, stat) {
-            if (err) { callback(err); return; }
-            if (stat.isFile()) {
-              realfiles.push(filename);
-            }
-            count--;
-            if (count === 0) {
-              var results = [];
-              realfiles.forEach(function (filename) {
-                fs.readFile(filename, function (err, data) {
-                  if (err) { callback(err); return; }
-                  results.push(data);
-                  if (results.length === realfiles.length) {
-                    callback(null, results);
-                  };
-                });
-              });
-            }
+        if (stat.isFile()) {
+          realfiles.push(filename);
+        }
+        count--;
+        if (count === 0) {
+          var results = [];
+          realfiles.forEach(function (filename) {
+            fs.readFile(filename, function (err, data) {
+              if (err) { callback(err); return; }
+              results.push(data);
+              if (results.length === realfiles.length) {
+                callback(null, results);
+              };
+            });
           });
-        });
+        }
       });
-    }
+    });
+  });
+}
 ```    
 This code reads the contents of a directory, filters out all directory and returns the contens of all files as an array. Without any helpers the whole control flow management totally obscures the intent of the code. With async.js it is possible to move the control flow aspects of the code out of the function and rewrite it like this:
-```js
-    function loaddir(path, callback) {
-        async.readdir(".")
-            .stat()
-            .filter(function(file) {
-                return file.stat.isFile()
-            })
-            .readFile("utf8")
-            .filter(function(file) {
-                return file.data
-            })
-            .toString(callback)
-    }
+```javascript
+function loaddir(path, callback) {
+  async.readdir(".")
+    .stat()
+    .filter(function(file) {
+      return file.stat.isFile()
+    })
+    .readFile("utf8")
+    .filter(function(file) {
+      return file.data
+    })
+    .toString(callback)
+}
 ```    
 
 Features
@@ -175,8 +175,8 @@ Core API
 Creates a generator generating an arithmetic progression of integers.
 `range(i, j)` returns [i, i+1, i+2, ..., j-1] and `start` defaults to 0.
 When step is given, it specifies the increment (or decrement). If `stop` is not given an infinite number of values if generated. This generates all positive odd numbers:
-```js
-    async.range(1, null, 2)
+```javascript
+async.range(1, null, 2)
 ```
 The optional `construct` argument must be a sub class of `async.Generator` and can be used to tell the function to return instances of the class.
 
@@ -184,8 +184,8 @@ The optional `construct` argument must be a sub class of `async.Generator` and c
 ### async.list(arr, [construct=async.Generator])
 
 Creates a generator, which returns the elements of the given array. This generates e.g. the values `1`, `2` and `3`:
-```js
-    async.list([1, 2, 3])
+```javascript
+async.list([1, 2, 3])
 ```
 The optional `construct` argument must be a sub class of `async.Generator` and can be used to tell the function to return instances of the class.
 
@@ -195,14 +195,14 @@ The optional `construct` argument must be a sub class of `async.Generator` and c
 Generators are implementing the 'Iterator' design pattern in an asynchronous way. It has a `next(callback)` method, which passes on each call the next generated value to the given callback. Generators can be chained and all construcors and filters return new `Generator` instances.
 
 The `source` is either another `async.Generator` or a generator function. All filters in the generator operate on the values generated by the source.
-```js
-    var i=0;
-    var gen = new async.Generator(function(callback) {
-        if (i>4)
-            callback(async.STOP)
-        else
-            callback(null, i++) // no error
-    })
+```javascript
+var i=0;
+var gen = new async.Generator(function(callback) {
+  if (i>4)
+    callback(async.STOP)
+  else
+    callback(null, i++) // no error
+})
 ```    
 `gen` in this example generates the sequence [0, 1, 2, 3, 4]. The first argument of the callback can be used to indicate an error the the end of the iteration, whicle the second argument is the generated value.
 
@@ -213,10 +213,10 @@ Special error value, which indicates the end of the iteration.
 ### Method: next(callback)
 
 Calls the callback with the next generated value:
-```js
-    gen.next(function(err, value) {
-        //
-    })
+```javascript
+gen.next(function(err, value) {
+  //
+})
 ```    
 The generated value is passed in the `value` argument. If an error occured while computing the value the `err` argument is set. In this case value the meaning of value is undefined. `async.STOP` can be passed as special error value to indicate the end of the iteration.
 
@@ -225,11 +225,11 @@ Usually this method is only needed to write custom filters.
 ### Filter: map(mapper)
 
 Applies the `mapper` function to all values of the generator's source and generates the result of the mapping.
-```js
-    async.range(0, 3)
-        .map(function(item, next) {
-            next(null, item + 1)
-        })
+```javascript
+async.range(0, 3)
+  .map(function(item, next) {
+    next(null, item + 1)
+  })
 ```    
 This will add one to each incoming item and thus generate the sequence [1, 2, 3].
 
@@ -239,11 +239,11 @@ The mapper can also be synchronous and simply return the result. In this case th
 ### Filter: filter(filter)
 
 Calls filter for each of the generator's source values. If the `filter` returns `false` for a passed value, the value is dropped from the sequence, otherwise the value is forwarded.
-```js
-    async.list([1, 2, 3, 4])
-        .filter(function(item, next) {
-            next(null, item % 2 == 0)
-        })
+```javascript
+async.list([1, 2, 3, 4])
+  .filter(function(item, next) {
+    next(null, item % 2 == 0)
+  })
 ```        
 This will filter out all odd values and generate the sequence [2, 4].
 
@@ -251,27 +251,27 @@ This will filter out all odd values and generate the sequence [2, 4].
 ### Filter: slice(begin, end)
 
 Counts the generator's source values starting with 0 and skips all values with an index smaller then `begin`. If the index is >= `end` the sequence is stopped.
-```js
-    async.range(0)
-        .slice(1, 4)
+```javascript
+async.range(0)
+  .slice(1, 4)
 ```        
 The `async.range` call generates an infinite sequence of all integers and the `slice` call transforms this into the sequence [1, 2, 3] by dropping the first value and stopping the sequence after the 4th value.
 
 ### Filter: reduce(reduce, [initialValue])
 
 Sum up the number from 1 to 5:
-```js
-    async.range(1, 5)
-        .reduce(function(previousValue, currentValue) {        
-            return previousValue + currentValue;
-        })
+```javascript
+async.range(1, 5)
+  .reduce(function(previousValue, currentValue) {        
+    return previousValue + currentValue;
+  })
 ```        
 Sum up the number from 1 to 5 but with a first 'initialValue' of 10:
-```js
-    async.range(1, 5)
-        .reduce(function(previousValue, currentValue, index, next) {
-            next(null, previousValue + currentValue);
-        }, 10)
+```javascript
+async.range(1, 5)
+  .reduce(function(previousValue, currentValue, index, next) {
+    next(null, previousValue + currentValue);
+  }, 10)
 ```
 
 ### Filter: forEach(fn)
@@ -281,11 +281,11 @@ Alias for `each`.
 ### Filter: each(fn)
 
 Calls `fn` for each of the source generator's values. The returned generator passes on the source values.
-```js
-    async.range(1, 10)
-        .each(function(item, next) {
-            console.log(item);
-        })
+```javascript
+async.range(1, 10)
+  .each(function(item, next) {
+    console.log(item);
+  })
 ```        
 Prints the numbers from 1 to 9. Otherwise the source sequence is not changed.
 
@@ -294,11 +294,11 @@ Prints the numbers from 1 to 9. Otherwise the source sequence is not changed.
 Check if any of the values in the source sequence match the condition (i.e. the `condition` callback returns true). The returned generator generates a one elmement sequence, which contains the boolean value of the result.
 
 Check if the source generates an even number:
-```js
-    async.list([1, 8, 3, 5])
-        .some(function odd(item) {
-            return item % 2 == 0
-        })
+```javascript
+async.list([1, 8, 3, 5])
+  .some(function odd(item) {
+    return item % 2 == 0
+  })
 ```
 This generates [true].
 
@@ -307,35 +307,35 @@ This generates [true].
 Check if all of the values in the source sequence match the condition (i.e. the `condition` callback returns true). The returned generator generates a one elmement sequence, which contains the boolean value of the result.
 
 Check if the source generates only even numbers:
-```js
-    async.list([1, 8, 3, 5])
-        .every(function odd(item) {
-            return item % 2 == 0
-        })
+```javascript
+async.list([1, 8, 3, 5])
+  .every(function odd(item) {
+    return item % 2 == 0
+  })
 ```
 This returns [false]
 
 ### Filter: call([context])
 
 Calls each of source values in sequence, which have to be functions. The functions can either be synchronous and return a value of be asynchronous and call the passed callback on completion. The generated sequence are the function's return values. The optional `context` argument defines the `this` context of the called functions.
-```js
-    async.list([
-        function sync() {
-            return "juhu"
-        },    
-        function async(next) {
-            next(null, "kinners")
-        }
-    ]).call()
+```javascript
+async.list([
+  function sync() {
+    return "juhu"
+  },    
+  function async(next) {
+    next(null, "kinners")
+  }
+]).call()
 ```    
 This calls the two functions in sequence and generates the sequence ["juhu", "kinners"].
 
 ### Filter: concat(...)
 
 Concatenates a variable number of generators with this generator. 
-```js
-    async.range(1, 4)
-        .concat(async.range(10, 13))
+```javascript
+async.range(1, 4)
+  .concat(async.range(10, 13))
 ```        
 This returns a generator, which generates the values of the first `range` followed by the values of the second `range`: [1, 2, 3, 10, 11, 12]
 
@@ -343,36 +343,36 @@ This returns a generator, which generates the values of the first `range` follow
 ### Filter: zip(...)
 
 Returns a generator, which generates on each `next()` an arroy of the next values of this generator and each of the passed arguments. The length of the generated sequence is truncated to the lenght of the shortest input sequence. This function expects a variable list of generators as arguments.
-```js
-    async.range(1, 4)
-        .zip(async.range(10, 14))
+```javascript
+async.range(1, 4)
+  .zip(async.range(10, 14))
 ```        
 This will generate [[1, 10], [2, 11], [3, 13]]
 
 ### Filter: sort([compare])
 
 Performs an Array.prototype.sort on the source values and returns a generator, which generates the result as one element sequence. Since this requires reading all source elements, the source must not generate an infinite number of values. Generates the read values in sorted order.
-```js
-    async.list([4, 2, 3, 9])
-        .sort()
+```javascript
+async.list([4, 2, 3, 9])
+  .sort()
 ```
 This generates the sequence [2, 3, 4, 9]
 
 ### Filter: join([separator])
 
 Performs an Array.prototype.join on the source values and returns a generator, which generates the result as one element sequence. Since this requires reading all source elements, the source must not generate an infinite number of values.
-```js
-    async.list([1, 4, 5])
-        .join(" - ")
+```javascript
+async.list([1, 4, 5])
+  .join(" - ")
 ```
 This will generate ["1 - 4 - 5"]
 
 ### Filter: reverse()
 
 Reverses the elements generated by the generator's source. Since this requires reading all source elements, the source must not generate an infinite number of values.
-```js
+```javascript
 async.list([1, 4, 5])
-    .revers()
+  .revers()
 ```
 This will generate [5, 4, 1]
 
@@ -381,27 +381,27 @@ This will generate [5, 4, 1]
 
 Perform the iteration until the generator's source either returns `async.STOP` or indicates an error. The value of the last generated value is passed to the callback.
 
-```js
-    async.list([1, 8, 3, 5])
-        .every(function odd(item) {
-            return item % 2 == 0
-        })
-        .end(function(err, allEven) {
-            console.log("All values are even: " + allEven)
-        }) 
+```javascript
+async.list([1, 8, 3, 5])
+  .every(function odd(item) {
+    return item % 2 == 0
+  })
+  .end(function(err, allEven) {
+    console.log("All values are even: " + allEven)
+  }) 
 ```
 This will print the last generated value (the result of `very`) on the console.
 
 ### Driver: toArray([breakOnError=true], callback)
 
 Perform the iteration until the generator's source either returns `async.STOP`. If `breakOnError` is true the iteration is stopped on the first error. Otherwise the iteration continues and all errors are collected in an error array. An array of all generated values is passed to the callback.
-```js
-    async.list([1, 8, 3, 5])
-        .map(function odd(item, next) {
-            next(err, item * 10)
-        })
-        .toArray(function(err, values) {
-            console.log(values)
-        }) 
+```javascript
+async.list([1, 8, 3, 5])
+  .map(function odd(item, next) {
+    next(err, item * 10)
+  })
+  .toArray(function(err, values) {
+    console.log(values)
+  }) 
 ```
 The last callback will be called with arr set to [10, 80, 30, 50].
