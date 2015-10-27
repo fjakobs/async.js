@@ -2,11 +2,12 @@ var async = require("../index")
 var assert = require("assert")
 var Path = require("path")
 var fs = require("fs")
+var Exists = fs.exists || Path.exists
 
 var testDir = "assets_TEST"
 
 var Test = {
-    
+
     setUp: function(next) {
         this.$dir = process.cwd()
         process.chdir(__dirname)
@@ -14,12 +15,12 @@ var Test = {
             async.copytree(__dirname + "/assets", testDir, next)
         })
     },
-    
+
     tearDown: function(next) {
         process.chdir(this.$dir)
         async.rmtree(__dirname + "/assets_TEST", next)
     },
-    
+
     "test stat": function(next) {
         async.files([testDir + "/1.txt"])
             .stat()
@@ -29,12 +30,12 @@ var Test = {
                 next()
             })
     },
-    
+
     "test unlink existing file should remove the file": function(next) {
         async.files([testDir + "/3.txt"])
             .unlink()
             .end(function(err, file) {
-                Path.exists(file.path, function(exists) {
+                Exists(file.path, function(exists) {
                     assert.ok(!exists)
                     next()
                 })
@@ -45,25 +46,25 @@ var Test = {
         async.files([testDir + "/emptydir"])
             .rmdir()
             .end(function(err, file) {
-                Path.exists(file.path, function(exists) {
+                Exists(file.path, function(exists) {
                     assert.ok(!exists)
                     next()
                 })
-            })        
+            })
     },
-    
+
     "test rmdir non empty dir should fail": function(next) {
         async.files([testDir + "/nonemptydir"])
             .rmdir()
             .end(function(err, file) {
                 assert.ok(err)
-                Path.exists(file.path, function(exists) {
+                Exists(file.path, function(exists) {
                     assert.ok(exists)
                     next()
                 })
             })
     },
-    
+
     "test rmdir non existing dir should fail": function(next) {
         async.files([testDir + "/foobar"])
             .rmdir()
@@ -72,7 +73,7 @@ var Test = {
                 next()
             })
     },
-    
+
     "test read file": function(next) {
         async.files([testDir + "/1.txt"])
             .readFile()
@@ -82,7 +83,7 @@ var Test = {
                 next()
             })
     },
-    
+
     "test open/close file": function(next) {
         async.files([testDir + "/1.txt"])
             .open()
@@ -97,10 +98,10 @@ var Test = {
             })
             .end(function(err) {
                 assert.ok(!err)
-                next()                
+                next()
             })
     },
-    
+
     "test chmod": function(next) {
         async.files([testDir + "/1.txt"])
             .chmod(0600)
@@ -122,32 +123,32 @@ var Test = {
             })
             .end(function(err) {
                 assert.ok(!err)
-                next()                
+                next()
             })
     },
-    
+
     "test mkdir/rmdir": function(next) {
         async.files([testDir + "/newdir"])
             .mkdir(0755)
             .each(function(file, next) {
-                Path.exists(file.path, function(exists) {
+                Exists(file.path, function(exists) {
                     assert.ok(exists)
                     next()
                 })
             })
             .rmdir()
             .each(function(file, next) {
-                Path.exists(file.path, function(exists) {
+                Exists(file.path, function(exists) {
                     assert.ok(!exists)
                     next()
                 })
             })
             .end(function(err) {
                 assert.ok(!err)
-                next()                
+                next()
             })
     },
-    
+
     "test write file with data from argument": function(next) {
         async.files([testDir + "/4.txt"])
             .writeFile("4")
@@ -158,7 +159,7 @@ var Test = {
                 next()
             })
     },
-    
+
     "test write file with data from stream": function(next) {
         async.files([testDir + "/5.txt"])
             .each(function(file) {
@@ -223,7 +224,7 @@ var Test = {
                 next()
             })
     },
-    
+
     "test glob with * in file name": function(next) {
         async.glob(testDir + "/*.txt")
             .get("path")
@@ -235,7 +236,7 @@ var Test = {
                 next()
             })
     },
-    
+
     "test glob with ? in file name": function(next) {
         async.glob(testDir + "/?.txt")
             .get("path")
@@ -247,7 +248,7 @@ var Test = {
                 next()
             })
     },
-    
+
     "test glob with only file magic": function(next) {
         process.chdir(testDir)
         async.glob("*.txt")
@@ -260,7 +261,7 @@ var Test = {
                 next()
             })
     },
-    
+
     "test glob without magic for not existing file should return empty list": function(next) {
         async.glob(testDir + "/notexisting/juhu.txt")
             .toArray(function(err, values) {
@@ -268,27 +269,27 @@ var Test = {
                 next()
             })
     },
-    
+
     "test glob with non existing file name should return empty list" : function(next) {
         async.glob(testDir + "/notexisting/*.txt")
             .toArray(function(err, values) {
                 assert.equal(values.length, 0)
                 next()
-            })        
+            })
     },
-    
+
     "test glob with * in path": function(next) {
         async.glob(testDir + "/dir*/*.txt")
             .get("path")
             .toArray(function(err, values) {
                 var expected = [
-                    testDir + "/dir1/1.txt", 
-                    testDir + "/dir2/2.txt", 
+                    testDir + "/dir1/1.txt",
+                    testDir + "/dir2/2.txt",
                     testDir + "/dir11/11.txt"
                 ]
                 assert.equal(JSON.stringify(values.sort()), JSON.stringify(expected.sort()))
                 next()
-            })        
+            })
     },
 
     "test glob with ? in path": function(next) {
@@ -301,33 +302,33 @@ var Test = {
                 ]
                 assert.equal(JSON.stringify(values.sort()), JSON.stringify(expected.sort()))
                 next()
-            })        
+            })
     },
-    
+
     "test glob with * in path and ? name": function(next) {
         async.glob(testDir + "/dir*/?.txt")
             .get("path")
             .toArray(function(err, values) {
                 var expected = [
-                    testDir + "/dir1/1.txt", 
+                    testDir + "/dir1/1.txt",
                     testDir + "/dir2/2.txt"
                 ]
                 assert.equal(JSON.stringify(values.sort()), JSON.stringify(expected.sort()))
                 next()
-            })        
-    },  
-    
+            })
+    },
+
     "test copytree should deal with recursive symlinks": function(next) {
         async.copytree(testDir + "/symlink-dir", testDir + "/symlink-dir-copy", function (err) {
             assert.equal(err, null);
-            
+
             fs.lstat(testDir + "/symlink-dir-copy/dir/symlink-dir", function (err, stat) {
                 assert.equal(err, null);
                 assert.equal(stat.isSymbolicLink(), true);
                 next();
             });
-        });       
-    },  
+        });
+    },
 }
 
 module.exports = require("../lib/test").testcase(Test, "fs")
