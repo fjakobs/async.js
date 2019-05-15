@@ -1,17 +1,16 @@
 {
     "name": "asyncjs",
     "description": "async.js it for the node fs module, what jQuery is for the DOM",
-    "version": "0.0.12",
-    "homepage" : "http://github.com/fjakobs/async.js",
+    "version": "0.0.13",
+    "homepage": "http://github.com/fjakobs/async.js",
     "author": "Fabian Jakobs <fabian.jakobs@web.de>",
-    "scripts": { "test": "node test/all.js" },
-    "main": "index",
-    "repository" : {
-        "type" : "git",
-         "url" : "http://github.com/fjakobs/async.js.git"
+    "scripts": {
+        "test": "node test/all.js"
     },
-    "licenses": [{
-        "type": "The MIT License",
-        "url": "http://www.opensource.org/licenses/mit-license.php"}
-    ]
+    "main": "index",
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/fjakobs/async.js.git"
+    },
+    "license": "MIT"
 }
